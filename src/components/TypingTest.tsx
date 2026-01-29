@@ -491,8 +491,19 @@ export default function TypingTest({
 
                 {/* Countdown Overlay */}
                 {startCountdown !== null && (
-                    <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm z-30 flex items-center justify-center animate-enter rounded-lg">
-                        <div className="text-8xl font-bold text-cyan-400 text-glow animate-pulse">
+                    <div
+                        className="absolute inset-0 z-30 flex items-center justify-center animate-enter rounded-lg backdrop-blur-sm transition-colors duration-300"
+                        style={{
+                            backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.8)'
+                        }}
+                    >
+                        <div
+                            className="text-8xl font-bold animate-pulse"
+                            style={{
+                                color: theme === 'dark' ? '#22d3ee' : '#0891b2', // cyan-400 : cyan-600
+                                textShadow: theme === 'dark' ? '0 0 30px rgba(34, 211, 238, 0.5)' : 'none'
+                            }}
+                        >
                             {startCountdown}
                         </div>
                     </div>

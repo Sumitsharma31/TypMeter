@@ -10,7 +10,10 @@ import Leaderboard from "@/components/Leaderboard";
 import PreviousScores, { ScoreRecord, saveGuestScore } from "@/components/PreviousScores";
 import { TestResult } from "@/hooks/useTypingTest";
 
+import { useTheme } from "@/hooks/useTheme";
+
 export default function Home() {
+  const { theme } = useTheme();
   const { userId } = useAuth();
   const [duration, setDuration] = useState(30);
   const [result, setResult] = useState<TestResult | null>(null);
@@ -93,19 +96,43 @@ export default function Home() {
         />
 
         {/* Divider */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        {/* Divider */}
+        <div
+          className="w-full h-px"
+          style={{
+            background: theme === 'dark'
+              ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent)'
+              : 'linear-gradient(to right, transparent, rgba(203,213,225,1), transparent)'
+          }}
+        ></div>
 
         {/* Results Section */}
         <ResultsGrid result={result} onRestart={handleRestart} />
 
         {/* Divider */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        {/* Divider */}
+        <div
+          className="w-full h-px"
+          style={{
+            background: theme === 'dark'
+              ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent)'
+              : 'linear-gradient(to right, transparent, rgba(203,213,225,1), transparent)'
+          }}
+        ></div>
 
         {/* Previous Scores History */}
         <PreviousScores onNewScore={latestScore} />
 
         {/* Divider */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        {/* Divider */}
+        <div
+          className="w-full h-px"
+          style={{
+            background: theme === 'dark'
+              ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent)'
+              : 'linear-gradient(to right, transparent, rgba(203,213,225,1), transparent)'
+          }}
+        ></div>
 
         {/* Leaderboard */}
         <Leaderboard refreshTrigger={scoreKey} />

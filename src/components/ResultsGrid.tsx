@@ -8,7 +8,10 @@ interface ResultsGridProps {
     onRestart?: () => void;
 }
 
+import { useTheme } from "@/hooks/useTheme";
+
 export default function ResultsGrid({ result, previousWpm = 82, onRestart }: ResultsGridProps) {
+    const { theme } = useTheme();
     if (!result) return null;
 
     const wpmChange = result.wpm - previousWpm;
@@ -22,7 +25,7 @@ export default function ResultsGrid({ result, previousWpm = 82, onRestart }: Res
     return (
         <section className="animate-enter delay-200 w-full">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+                <h2 className="text-xl font-semibold tracking-tight flex items-center gap-2" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
                     <iconify-icon icon="solar:chart-square-linear" class="text-cyan-600 dark:text-cyan-400"></iconify-icon>
                     Your Result
                 </h2>
@@ -35,14 +38,15 @@ export default function ResultsGrid({ result, previousWpm = 82, onRestart }: Res
 
             <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-4">
                 {/* Main WPM Card */}
-                <div className="glass-card col-span-1 md:col-span-2 lg:col-span-2 row-span-2 rounded-2xl p-6 relative overflow-hidden group">
+                <div className={`col-span-1 md:col-span-2 lg:col-span-2 row-span-2 rounded-2xl p-6 relative overflow-hidden group transition-colors duration-300 ${theme === 'dark' ? 'glass-card' : 'bg-white border border-slate-200 shadow-sm'
+                    }`}>
                     <div className="absolute -right-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
                     <div className="relative z-10 flex flex-col justify-between h-full">
                         <div>
-                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                            <p className="text-sm font-medium uppercase tracking-wider" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
                                 WPM
                             </p>
-                            <h3 className="text-6xl md:text-7xl font-semibold text-slate-900 dark:text-white mt-2 tracking-tighter dark:text-glow">
+                            <h3 className="text-6xl md:text-7xl font-semibold mt-2 tracking-tighter" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
                                 {result.wpm}
                             </h3>
                             <p
@@ -68,12 +72,13 @@ export default function ResultsGrid({ result, previousWpm = 82, onRestart }: Res
                 </div>
 
                 {/* Accuracy Card */}
-                <div className="glass-card col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex items-center justify-between relative overflow-hidden">
+                <div className={`col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex items-center justify-between relative overflow-hidden transition-colors duration-300 ${theme === 'dark' ? 'glass-card' : 'bg-white border border-slate-200 shadow-sm'
+                    }`}>
                     <div>
-                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <p className="text-xs font-medium uppercase tracking-wider" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
                             Accuracy
                         </p>
-                        <h3 className="text-3xl font-semibold text-slate-900 dark:text-white mt-1">
+                        <h3 className="text-3xl font-semibold mt-1" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
                             {result.accuracy}%
                         </h3>
                     </div>
@@ -108,9 +113,10 @@ export default function ResultsGrid({ result, previousWpm = 82, onRestart }: Res
                 </div>
 
                 {/* Consistency Card */}
-                <div className="glass-card col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex flex-col justify-center">
+                <div className={`col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex flex-col justify-center transition-colors duration-300 ${theme === 'dark' ? 'glass-card' : 'bg-white border border-slate-200 shadow-sm'
+                    }`}>
                     <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <p className="text-xs font-medium uppercase tracking-wider" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
                             Consistency
                         </p>
                         <span className="text-lg font-semibold text-violet-600 dark:text-violet-400">
@@ -146,25 +152,27 @@ export default function ResultsGrid({ result, previousWpm = 82, onRestart }: Res
                 </div>
 
                 {/* Time Card */}
-                <div className="glass-card col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex flex-col justify-center">
+                <div className={`col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl p-5 flex flex-col justify-center transition-colors duration-300 ${theme === 'dark' ? 'glass-card' : 'bg-white border border-slate-200 shadow-sm'
+                    }`}>
                     <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <p className="text-xs font-medium uppercase tracking-wider" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
                             Time
                         </p>
                         <iconify-icon icon="solar:clock-circle-linear" class="text-orange-500 dark:text-orange-400"></iconify-icon>
                     </div>
                     <div className="flex items-baseline gap-1">
-                        <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">
+                        <h3 className="text-3xl font-semibold" style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
                             {result.duration}
                         </h3>
-                        <span className="text-sm text-slate-500">s</span>
+                        <span className="text-sm" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>s</span>
                     </div>
                 </div>
 
                 {/* Problem Keys Map */}
-                <div className="glass-card col-span-1 md:col-span-4 lg:col-span-6 rounded-2xl p-6">
+                <div className={`col-span-1 md:col-span-4 lg:col-span-6 rounded-2xl p-6 transition-colors duration-300 ${theme === 'dark' ? 'glass-card' : 'bg-white border border-slate-200 shadow-sm'
+                    }`}>
                     <div className="flex items-center justify-between mb-4">
-                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Problem Keys</p>
+                        <p className="text-sm font-medium" style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>Problem Keys</p>
                         <button className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-white transition-colors">
                             View Details
                         </button>
