@@ -1,31 +1,31 @@
 {
   "name": "typmeter",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "description": "A modern typing speed test application",
+  "author": "Sumit",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-     "export": "next build && next export"
+    "lint": "eslint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.36.10",
     "@supabase/supabase-js": "^2.91.1",
-    "iconify-icon": "^3.0.2",
-    "next": "16.1.4",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "recharts": "^3.7.0"
+    "next": "15.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@clerk/clerk-react": "^5.22.7",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "eslint": "^9",
-    "eslint-config-next": "16.1.4",
+    "eslint-config-next": "15.1.0",
+    "iconify-icon": "^3.0.2",
+    "recharts": "^3.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

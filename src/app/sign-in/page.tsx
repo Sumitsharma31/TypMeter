@@ -1,4 +1,5 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
+import { SignIn } from "@clerk/clerk-react";
 import Link from "next/link";
 
 export default function SignInPage() {

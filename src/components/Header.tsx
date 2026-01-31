@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useAuth } from "@clerk/clerk-react";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useTheme } from "@/hooks/useTheme";
 import ThemeToggle from "./ThemeToggle";
@@ -106,8 +106,22 @@ export default function Header() {
                     <SignedIn>
                         <UserButton
                             appearance={{
+                                variables: {
+                                    colorText: theme === 'dark' ? 'white' : 'black',
+                                    colorTextSecondary: theme === 'dark' ? '#94a3b8' : '#64748b',
+                                    colorPrimary: '#06b6d4',
+                                    colorBackground: theme === 'dark' ? '#0f172a' : 'white',
+                                    colorInputText: theme === 'dark' ? 'white' : 'black',
+                                },
                                 elements: {
-                                    avatarBox: "w-8 h-8 rounded-full border border-white/10 hover:border-cyan-400/50 transition-colors"
+                                    avatarBox: "w-8 h-8 rounded-full border border-white/10 hover:border-cyan-400/50 transition-colors",
+                                    userButtonPopoverCard: "!bg-white dark:!bg-slate-900 !border !border-slate-200 dark:!border-slate-800 !shadow-xl",
+                                    userButtonPopoverFooter: "hidden",
+                                    userPreviewMainIdentifier: "!text-slate-900 dark:!text-white !font-semibold",
+                                    userPreviewSecondaryIdentifier: "!text-slate-500 dark:!text-slate-400",
+                                    userButtonPopoverActionButton: "!text-slate-700 dark:!text-slate-200 hover:!bg-slate-100 dark:hover:!bg-slate-800",
+                                    userButtonPopoverActionButtonIcon: "!text-slate-500 dark:!text-slate-400",
+                                    userButtonPopoverActionButtonText: "!text-slate-800 dark:!text-slate-100",
                                 }
                             }}
                         />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { ScoreRecord } from "@/components/PreviousScores";
 import Header from "@/components/Header";

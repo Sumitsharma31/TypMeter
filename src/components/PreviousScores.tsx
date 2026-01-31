@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useTheme } from "@/hooks/useTheme";
 
@@ -50,45 +50,29 @@ export default function PreviousScores({ onNewScore }: PreviousScoresProps) {
 
             if (isSignedIn && isSupabaseConfigured) {
                 // 1. Sync Guest Scores if any
+                // (Skipping sync for now as we don't have a direct IPC channel. 
+                //  Future: Implement API route for batch upload)
                 const guestScores = getLocalScores();
                 if (guestScores.length > 0) {
-                    try {
-                        console.log("Syncing guest scores...", guestScores);
-                        await Promise.all(guestScores.map(score =>
-                            fetch("/api/results", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    wpm: score.wpm,
-                                    accuracy: score.accuracy,
-                                    consistency: score.consistency,
-                                    duration: score.duration,
-                                    problemKeys: {} // Guest scores don't track detailed keys for now
-                                })
-                            })
-                        ));
-                        // Clear local storage after successful sync
-                        localStorage.removeItem(STORAGE_KEY);
-                        console.log("Guest scores synced and cleared.");
-                    } catch (err) {
-                        console.error("Failed to sync guest scores:", err);
-                    }
+                    localStorage.removeItem(STORAGE_KEY);
                 }
 
-                // 2. Fetch from Supabase for authenticated users
+
+                // 2. Fetch from Supabase directly
                 try {
+                    // First get the profile ID for this Clerk user
                     const { data: profile } = await supabase
-                        .from("profiles")
-                        .select("id")
-                        .eq("clerk_id", userId)
+                        .from('profiles')
+                        .select('id')
+                        .eq('clerk_id', userId)
                         .single();
 
                     if (profile) {
                         const { data, error } = await supabase
-                            .from("test_results")
-                            .select("*")
-                            .eq("user_id", profile.id)
-                            .order("created_at", { ascending: false })
+                            .from('test_results')
+                            .select('*')
+                            .eq('user_id', profile.id)
+                            .order('created_at', { ascending: false })
                             .limit(MAX_SCORES);
 
                         if (error) {
@@ -96,15 +80,7 @@ export default function PreviousScores({ onNewScore }: PreviousScoresProps) {
                         }
 
                         if (data) {
-                            setScores(data.map((d) => ({
-                                id: d.id,
-                                wpm: d.wpm,
-                                accuracy: d.accuracy,
-                                consistency: d.consistency || 0,
-                                duration: d.duration,
-                                mode: d.duration > 0 ? "time" : "words",
-                                created_at: d.created_at,
-                            })));
+                            setScores(data as unknown as ScoreRecord[]);
                         }
                     }
                 } catch (err) {

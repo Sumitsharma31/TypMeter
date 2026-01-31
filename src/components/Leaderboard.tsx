@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 import Link from "next/link";
 import { supabase, LeaderboardEntry, isSupabaseConfigured } from "@/lib/supabase";
 import { useTheme } from "@/hooks/useTheme";
@@ -19,33 +19,40 @@ export default function Leaderboard({ refreshTrigger = 0 }: { refreshTrigger?: n
         async function fetchLeaderboard() {
             try {
                 setLoading(true);
+
                 const { data, error } = await supabase
-                    .from("test_results")
+                    .from('test_results')
                     .select(`
-            id,
-            wpm,
-            accuracy,
-            duration,
-            created_at,
-            profiles!inner(username, avatar_url)
-          `)
-                    .gte("created_at", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-                    .order("wpm", { ascending: false })
+                        id,
+                        wpm,
+                        accuracy,
+                        duration,
+                        created_at,
+                        profiles!inner (
+                            username,
+                            avatar_url
+                        )
+                    `)
+                    .order('wpm', { ascending: false })
                     .limit(3);
 
-                if (!error && data && data.length > 0) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    setEntries(data.map((d: any) => ({
-                        id: d.id,
-                        username: d.profiles?.username || "Anonymous",
-                        avatar_url: d.profiles?.avatar_url,
-                        wpm: d.wpm,
-                        accuracy: d.accuracy,
-                        duration: d.duration,
-                        created_at: d.created_at,
-                    })));
+                if (error) {
+                    console.error("Error fetching leaderboard:", error);
+                    return;
+                }
+
+                if (data && data.length > 0) {
+                    const formattedDetails: LeaderboardEntry[] = data.map((item: any) => ({
+                        id: item.id,
+                        wpm: item.wpm,
+                        accuracy: item.accuracy,
+                        duration: item.duration,
+                        created_at: item.created_at,
+                        username: item.profiles?.username || 'Unknown',
+                        avatar_url: item.profiles?.avatar_url
+                    }));
+                    setEntries(formattedDetails);
                 } else {
-                    // Clear entries if empty or error to avoid stale data
                     setEntries([]);
                 }
             } catch (err) {

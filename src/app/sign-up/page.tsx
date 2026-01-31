@@ -1,4 +1,5 @@
-import { SignUp } from "@clerk/nextjs";
+"use client";
+import { SignUp } from "@clerk/clerk-react";
 import Link from "next/link";
 
 export default function SignUpPage() {

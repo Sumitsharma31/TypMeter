@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TypingTest from "@/components/TypingTest";
@@ -15,6 +15,7 @@ import { useTheme } from "@/hooks/useTheme";
 export default function Home() {
   const { theme } = useTheme();
   const { userId } = useAuth();
+  const { user } = useUser();
   const [duration, setDuration] = useState(30);
   const [result, setResult] = useState<TestResult | null>(null);
   const [latestScore, setLatestScore] = useState<ScoreRecord | undefined>();
@@ -37,22 +38,29 @@ export default function Home() {
     };
 
     // Save to database if user is authenticated
-    if (userId) {
+    if (userId && user) {
       try {
-        const response = await fetch("/api/results", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
-            wpm: testResult.wpm,
-            accuracy: testResult.accuracy,
-            consistency: testResult.consistency,
-            duration: testResult.duration,
-            problemKeys: testResult.problemKeys,
-          }),
+            result: {
+              wpm: testResult.wpm,
+              accuracy: testResult.accuracy,
+              consistency: testResult.consistency,
+              duration: testResult.duration,
+              problemKeys: testResult.problemKeys,
+            },
+            username: user.username || user.firstName || `User-${userId.slice(0, 6)}`,
+            avatar_url: user.imageUrl,
+          })
         });
 
         if (!response.ok) {
-          console.error("Failed to save result, status:", response.status);
+          const errorData = await response.json();
+          console.error("Failed to save result:", errorData.error);
         }
 
         // Trigger refresh of PreviousScores and Leaderboard via key/trigger
